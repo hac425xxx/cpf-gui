@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <title>通用模糊测试框架</title>
+
+    <meta name="description" content="overview &amp; stats" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <!-- <link rel="stylesheet" href="assets/font-awesome/4.5.0/css/font-awesome.min.css" /> -->
+
+    <!-- page specific plugin styles -->
+
+    <!-- text fonts -->
+    <!-- <link rel="stylesheet" href="assets/css/fonts.googleapis.com.css" /> -->
+
+    <!-- ace styles -->
+    <link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+    <link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+    <link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+
+    <link rel="stylesheet" href="assets/css/loader.css" />
+
+    <!-- ace settings handler -->
+    <script src="assets/js/ace-extra.min.js"></script>
+    <script>
+        path = require("path")
+        window.$ = window.jQuery = require(path.resolve('app/assets/js/jquery-2.1.4.min'));
+    </script>
+
+    <script src="assets/js/bootstrap.min.js"></script>
+
+    <!-- ace scripts -->
+    <script src="assets/js/ace-elements.min.js"></script>
+    <script src="assets/js/ace.min.js"></script>
+</head>
+
+
+<header style="-webkit-app-region: drag">
+    <section>
+        <!-- 导航栏 -->
+        <div id="navbar" class="navbar navbar-default          ace-save-state">
+            <div class="navbar-container ace-save-state" id="navbar-container">
+                <div class="navbar-header pull-left">
+                    <a href="#" class="navbar-brand">
+                        <small>
+                            <i class="glyphicon glyphicon-flag"></i>
+                            通用模糊测试框架
+                        </small>
+                    </a>
+                </div>
+            </div><!-- /.navbar-container -->
+        </div>
+    </section>
+</header>
+
+
+<body class="no-skin">
+    <div class="main-container ace-save-state" id="main-container">
+        <script type="text/javascript">
+            try { ace.settings.loadState('main-container') } catch (e) { }
+        </script>
+
+        <div id="sidebar" class="sidebar                  responsive                    ace-save-state">
+            <script type="text/javascript">
+                try { ace.settings.loadState('sidebar') } catch (e) { }
+            </script>
+
+            <ul class="nav nav-list">
+                <li class="">
+                    <a href="index.html">
+                        <i class="menu-icon glyphicon glyphicon-fire"></i>
+                        <span class="menu-text"> 创建任务 </span>
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="active">
+                    <a href="status.html">
+                        <i class="menu-icon glyphicon glyphicon-eye-open"></i>
+                        <span class="menu-text"> 查看任务 </span>
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+            </ul><!-- /.nav-list -->
+        </div>
+
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="page-content">
+                    <div class="row">
+                        <div class="col-sm-12">
+
+                            <div class="row" style="display: none;">
+                                <div class="col-sm-3">
+                                    <p>Fuzzer服务地址：</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p id="fuzzer_server">192.168.245.158:5000</p>
+                                </div>
+                            </div>
+
+
+                            <h3>已有任务列表</h3>
+                            <div class="hr hr-18 dotted hr-double"></div>
+
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <table id="task-table" class="table  table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>工程名</th>
+                                                <th>任务ID</th>
+                                                <th>开始时间</th>
+                                                <th>任务状态</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.span -->
+                            </div>
+
+
+                            <div id="task-info">
+
+                                <div class="row">
+                                    <h3>任务信息</h3>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-3 no-padding-right" style="text-align: center; background-color: #eee;">
+                                        <label>项目名</label>
+                                    </div>
+                                    <div class="col-sm-9" style="background-color: #31c5386e; text-align: left;">
+                                        <label id="project-name"></label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-3 no-padding-right" style="text-align: center; background-color: #eee;">
+                                        <label>任务ID</label>
+                                    </div>
+                                    <div class="col-sm-9" style="background-color: #31c5386e; text-align: left;">
+                                        <label id="task-id"></label>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-3 no-padding-right" style="text-align: center; background-color: #eee;">
+                                        <label>项目状态</label>
+                                    </div>
+                                    <div class="col-sm-9" style="background-color: #31c5386e; text-align: left;">
+                                        <label id="status">运行中...</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-3 no-padding-right" style="text-align: center; background-color: #eee;">
+                                        <label>运行时间</label>
+                                    </div>
+                                    <div class="col-sm-9" style="background-color: #31c5386e; text-align: left;">
+                                        <label id="run-time"></label>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-3 no-padding-right" style="text-align: center; background-color: #eee;">
+                                        <label>测试次数</label>
+                                    </div>
+                                    <div class="col-sm-9" style="background-color: #31c5386e; text-align: left;">
+                                        <label id="fuzz-count"></label>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-3 no-padding-right" style="text-align: center; background-color: #eee;">
+                                        <label>工作目录</label>
+                                    </div>
+                                    <div class="col-sm-9" style="background-color: #31c5386e; text-align: left;">
+                                        <label id="workspace"></label>
+                                    </div>
+                                </div>
+
+                                <div class="row" style="display: none;" id="crash-info">
+                                    <div class="col-sm-3 no-padding-right" style="text-align: center; background-color: #eee;">
+                                        <label>Crash用例路径</label>
+                                    </div>
+                                    <div class="col-sm-9" style="background-color: #31c5386e; text-align: left;">
+                                        <label id="crash-path"></label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.page-content -->
+            </div>
+        </div><!-- /.main-content -->
+
+        <div class="footer">
+            <div class="footer-inner">
+                <div class="footer-content">
+
+                    <span class="bigger-120">
+                        <span class="blue bolder">通用模糊测试框架</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+            <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+        </a>
+    </div><!-- /.main-container -->
+
+    <script src="assets/js/status.js"></script>
+
+
+</body>
+
+
+</html>

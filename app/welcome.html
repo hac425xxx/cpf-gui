@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <title>通用模糊测试框架</title>
+
+    <meta name="description" content="overview &amp; stats" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <!-- <link rel="stylesheet" href="assets/font-awesome/4.5.0/css/font-awesome.min.css" /> -->
+
+    <!-- page specific plugin styles -->
+
+    <!-- text fonts -->
+    <!-- <link rel="stylesheet" href="assets/css/fonts.googleapis.com.css" /> -->
+
+    <!-- ace styles -->
+    <link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+    <link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+    <link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+
+    <link rel="stylesheet" href="assets/css/overhang.min.css" />
+
+
+    <!-- inline styles related to this page -->
+
+    <!-- ace settings handler -->
+    <script src="assets/js/ace-extra.min.js"></script>
+    <script>
+        const path = require('path')
+        window.$ = window.jQuery = require(path.resolve(`${__dirname}/assets/js/jquery-2.1.4.min`));
+    </script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/ace-elements.min.js"></script>
+    <script src="assets/js/ace.min.js"></script>
+    <script src="assets/js/jquery-ui.min.js"></script>
+    <script src="assets/js/overhang.min.js"></script>
+</head>
+
+<style>
+    body {
+            font-family: "sofia-pro","Sofia Pro",sans-serif;
+            background-color: #fefcee;
+        }
+        
+        
+        @media screen and (min-width: 1020px){
+        
+        .form-wrap{
+            -webkit-transform: translate(-50%, 0);
+            transform: translate(-50%, 0);
+            margin-top: -450px;
+            padding-top: 30px;
+        }    
+            
+        .form-wrap {
+            top: 50%;
+            left: 50%;
+        }
+        
+        .form-wrap-inn{
+            padding: 20px;
+            -webkit-box-shadow: 0px 10px 122px 0px rgba(170,102,255,0.23);
+            box-shadow: 0px 10px 122px 0px rgba(170,102,255,0.23);
+        }
+        
+        .form-content {
+            padding: 20px 20px 30px 20px;
+        }
+        
+        }
+        
+        .form-wrap {
+            position: absolute;
+            margin: 0 auto;
+            max-width: 650px;
+            width: 100%;
+        }
+        .form-wrap-inn{
+            position: relative;
+            background-color: #fff;
+            background-repeat: repeat;
+            -webkit-transition: all 500ms ease;
+            transition: all 500ms ease;
+        }
+        
+        .frame {
+            position: relative;
+            border:3px solid  #a6f;
+            -webkit-transition: border-color 300ms ease;
+            transition: border-color 300ms ease;
+        }
+        
+        .header{
+            text-align:center;
+        }
+        
+        .header i{
+            color: #a6f;
+            font-size: 30px;
+        }
+        
+        .header h2{
+            color: #a6f;
+            font-size: 30px;
+            text-transform: uppercase;
+        }
+        
+        .header p{
+            color: #333;
+            font-size: 18px;
+        }
+        
+        .header p a{
+            color: #a6f;
+        }
+        
+        .form-group {
+            position: relative;
+        }
+        
+        .login-form {
+            max-width: 412px;
+            margin: 30px auto;
+        }
+        
+        .form-label {
+            position: absolute;
+            left: 0;
+            top: 10px;
+            color: #999;
+            background-color: #fff;
+            z-index: 10;
+            transition: font-size 150ms ease-out, -webkit-transform 150ms ease-out;
+            transition: transform 150ms ease-out, font-size 150ms ease-out;
+            transition: transform 150ms ease-out, font-size 150ms ease-out, -webkit-transform 150ms ease-out;
+        }
+        
+        .form-input {
+            position: relative;
+            padding: 12px 0px 5px 0;
+            width: 100%;
+            outline: 0;
+            border: 0;
+            box-shadow: 0 1px 0 0 #e5e5e5;
+            transition: box-shadow 150ms ease-out;
+        }
+
+        .main{
+            text-align: center;
+            border-radius: 20px;
+            position: absolute;
+            left: 50%;
+            top: 10%;
+            transform: translate(-50%,-50%);
+        }
+</style>
+
+
+<header style="-webkit-app-region: drag">
+    <section>
+        <!-- 导航栏 -->
+        <div id="navbar" class="navbar navbar-default          ace-save-state">
+            <div class="navbar-container ace-save-state" id="navbar-container">
+                <div class="navbar-header pull-left">
+                    <a href="#" class="navbar-brand">
+                        <small>
+                            <i class="glyphicon glyphicon-flag"></i>
+                            通用模糊测试框架
+                        </small>
+                    </a>
+                </div>
+            </div><!-- /.navbar-container -->
+        </div>
+    </section>
+</header>
+
+<body>
+    <div class="container main" id="main-content">
+        <div class="form-wrap">
+            <div class="form-wrap-inn">
+                <div class="frame">
+                    <div class="form-content">
+                        <div class="header">
+                            <i class="glyphicon glyphicon-eye-open"></i>
+                            <h2>模糊测试设备连接设置</h2>
+                        </div>
+
+                        <div class="login-form">
+                            <form action="" class="form">
+                                <div class="form-group">
+                                    <input id="ip" class="form-input" type="text" placeholder="设备的IP地址">
+                                </div>
+                                <div class="form-group">
+                                    <input id="port" class="form-input" type="text" placeholder="设备监听的端口">
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-info" type="button" onclick="connect()">
+                                        <i class="ace-icon glyphicon glyphicon-log-in"></i>
+                                        连接
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    function load_index() {
+        const fs = require("fs");
+        //console.log(path.resolve("app/index.tpl"))
+        // 异步读取
+        fs.readFile(`${__dirname}/index.tpl`, function (err, data) {
+            if (err) {
+                return console.error(err);
+            }
+            $("body").html(data.toString());
+        });
+    }
+
+    function connect() {
+        const { remote, ipcRenderer } = require('electron');
+        let request = require('request');
+
+        var ip = $("#ip").val();
+        var port = $("#port").val();
+
+        u = `http://${ip}:${port}/connect`;
+        request({
+            url: u,
+            proxy: "http://127.0.0.1:8080"
+        }, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                //alert(body);
+                if (body.indexOf("ok") > -1) {
+                    //alert("服务存活")
+                    $('body').overhang({
+                        type: 'success',
+                        message: '连接成功....',
+                        duration: 2
+                    });
+
+                    localStorage.setItem("target", `http://${ip}:${port}`);
+                    setTimeout(function(){
+                        ipcRenderer.send('load-app');
+                    }, 1000);
+                    //load_index();
+                    
+                } else {
+                    $('#main-content').overhang({
+                        type: 'warn',
+                        duration: 2,
+                        message: '连接失败,请重试!!!'
+                    });
+                }
+            } else {
+                $('#main-content').overhang({
+                    type: 'warn',
+                    duration: 2,
+                    message: '连接失败,请重试!!!'
+                });
+            }
+
+        });
+    }
+
+    $('input').focus(function () {
+        $(this).parents('.form-group').addClass('focused');
+    });
+
+    $('input').blur(function () {
+        var inputValue = $(this).val();
+        if (inputValue == "") {
+            $(this).removeClass('filled');
+            $(this).parents('.form-group').removeClass('focused');
+        } else {
+            $(this).addClass('filled');
+        }
+    })
+
+
+    $("#ip").val("192.168.245.158");
+    $("#port").val("5000");
+</script>
+
+</html>

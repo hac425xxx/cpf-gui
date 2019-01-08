@@ -1,0 +1,21 @@
+{
+  "name": "通用协议Fuzzer",
+  "version": "1.0.0",
+  "description": "一款通用协议模糊测试工具的 GUI",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "hac425",
+  "devDependencies": {
+    "electron": "^3.0.7"
+  },
+  "dependencies": {
+    "archiver": "^3.0.0",
+    "compressing": "^1.4.0",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "request": "^2.88.0",
+    "url": "^0.11.0"
+  }
+}
