@@ -40,7 +40,14 @@
 					<i class="menu-icon glyphicon glyphicon-eye-open"></i>
 					<span class="menu-text"> 查看任务 </span>
 				</a>
+				<b class="arrow"></b>
+			</li>
 
+			<li class="">
+				<a href="#" onclick="load_replay()">
+					<i class="menu-icon glyphicon glyphicon-repeat"></i>
+					<span class="menu-text"> 重放异常用例 </span>
+				</a>
 				<b class="arrow"></b>
 			</li>
 		</ul><!-- /.nav-list -->
@@ -59,10 +66,10 @@
 						<form class="form-horizontal" role="form">
 
 							<div class="form-group">
-								<label class="col-sm-3 control-label" for="fuzz-type">模糊测试类型</label>
+								<label class="col-sm-3 control-label" for="selectd">模糊测试类型</label>
 								<div class="col-sm-3">
 									<div>
-										<select class="form-control" id="fuzz-type" onchange="select_type()">
+										<select class="form-control" id="selectd" onchange="select_type()">
 											<option value="tcp">TCP模糊测试</option>
 											<option value="udp">UDP模糊测试</option>
 											<option value="serial">串口模糊测试</option>

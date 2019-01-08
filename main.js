@@ -43,7 +43,7 @@ ipcMain.on('select-file-requests', (event) => {
         properties: ['openFile']
     }, (files) => {
         if (files) {
-            event.sender.send('selected', files)
+            event.sender.send('selected-file', files)
         }
     })
 });

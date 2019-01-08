@@ -41,10 +41,18 @@
                     <i class="menu-icon glyphicon glyphicon-eye-open"></i>
                     <span class="menu-text"> 查看任务 </span>
                 </a>
+                <b class="arrow"></b>
+            </li>
 
+            <li class="">
+                <a href="#" onclick="load_replay()">
+                    <i class="menu-icon glyphicon glyphicon-repeat"></i>
+                    <span class="menu-text"> 重放异常用例 </span>
+                </a>
                 <b class="arrow"></b>
             </li>
         </ul><!-- /.nav-list -->
+
     </div>
 
     <div class="main-content">
@@ -53,7 +61,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="row">
-                            <h3>已有任务列表</h3>
+                            <h3>当前任务列表</h3>
                         </div>
 
                         <!-- <div class="hr hr-18 dotted hr-double"></div> -->

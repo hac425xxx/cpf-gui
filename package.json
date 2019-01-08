@@ -1,5 +1,5 @@
 {
-  "name": "通用协议Fuzzer",
+  "name": "cpf-gui",
   "version": "1.0.0",
   "description": "一款通用协议模糊测试工具的 GUI",
   "main": "main.js",
