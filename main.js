@@ -67,7 +67,6 @@ ipcMain.on('load-app', (event) => {
 
 
 function clean(){
-    
     mainWindow.webContents.send('clear-local-storage');
 }
 
@@ -83,7 +82,7 @@ function about(){
 
 function createWindow() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({ width: 1066, height: 620, frame: false })
+    mainWindow = new BrowserWindow({ width: 1070, height: 630, frame: false })
 
     // and load the index.html of the app.
     mainWindow.loadFile('app/welcome.html')

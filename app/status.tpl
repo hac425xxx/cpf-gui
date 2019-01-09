@@ -139,7 +139,8 @@
                                         <span class="editable editable-click" id="workspace">/tmp</span>
                                     </div>
                                 </div>
-                                <div class="profile-info-row">
+
+                                <div class="profile-info-row" id="crash-info">
                                     <div class="profile-info-name"> Crash用例路径 </div>
 
                                     <div class="profile-info-value">

@@ -136,13 +136,13 @@
 
 							<div class="col-md-offset-3 col-md-9">
 								<button class="btn btn-info" type="button" id="create-task" onclick="replay()">
-									<i class="ace-icon fa fa-check"></i>
+									<i class="ace-icon glyphicon glyphicon-send"></i>
 									重放
 								</button>
 
 								&nbsp; &nbsp; &nbsp;
 								<button class="btn" type="reset">
-									<i class="ace-icon fa fa-undo"></i>
+									<i class="ace-icon glyphicon glyphicon-remove"></i>
 									重置
 								</button>
 							</div>

@@ -96,6 +96,13 @@ function create_task_sub() {
 
             add_local_task_info(task_info);
 
+            localStorage.setItem("current-status-taskid", body.task_id);
+
+            var int = setInterval(() => {
+                background_check_task_status(body.task_id)
+            }, 2000);
+
+            localStorage.setItem(`bg-check-${body.task_id}`, int.toString());
 
             $('body').overhang({
                 type: 'success',
@@ -118,6 +125,7 @@ function create_task_sub() {
 
 
 function create_task() {
+    save_selected_info();
     upload(get_target(), $("#zip-path").text());
 }
 
@@ -133,7 +141,7 @@ function add_local_task_info(info) {
     localStorage.setItem(info.task_id, JSON.stringify(info));
 }
 
-if (localStorage.getItem("index-init") == null) {
+if (localStorage.getItem("index-init") != "yes") {
     ipcRenderer.on('selected', (event, src_paths) => {
         src_path = src_paths[0];
         const os = require('os');

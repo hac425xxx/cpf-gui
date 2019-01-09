@@ -40,7 +40,7 @@ function get_status(u, task_id) {
 }
 
 function add_task_info(task_id, start_time, status, project_name) {
-    tr = `<tr onclick="get_task_info('${task_id}', 'click')"><td>${project_name}</td><td>${task_id}</td><td>${start_time}</td><td id="status-${task_id}">${status}</td><td><div class="hidden-sm hidden-xs btn-group"><button class="btn btn-xs btn-success" onclick="get_task_info('${task_id}', 'click')" type="margin-right: 8px;"><i class="ace-icon glyphicon glyphicon-eye-open"></i></button><button class="btn btn-xs btn-danger stop-btn" onclick="stop_task('${task_id}')"><i class="ace-icon glyphicon glyphicon-stop"></i></button></div></td></tr>`;
+    tr = `<tr id="${task_id}" onclick="get_task_info('${task_id}', 'click')"><td>${project_name}</td><td>${task_id}</td><td>${start_time}</td><td id="status-${task_id}">${status}</td><td><div class="hidden-sm hidden-xs btn-group"><button class="btn btn-xs btn-success" onclick="get_task_info('${task_id}', 'click')" type="margin-right: 8px;"><i class="ace-icon glyphicon glyphicon-eye-open"></i></button><button class="btn btn-xs btn-danger stop-btn" onclick="stop_task('${task_id}')"><i class="ace-icon glyphicon glyphicon-stop"></i></button></div></td></tr>`;
     var $table = $('#task-table');
     $table.append(tr);
 }
@@ -63,14 +63,15 @@ function get_task_info(task_id, type="") {
         return
     }
 
+    if (!task_id.length) {
+        return
+    }
+    // alert(type);
     if (type != "click" && is_alive(task_id) == false) {
         return;
     }
 
-
-    if (!task_id.length) {
-        return
-    }
+    localStorage.setItem("current-status-taskid", task_id);
 
     // console.log(`进入 get taskinfo ${task_id}`);
     t = url.resolve(get_target(), "status");
@@ -89,9 +90,10 @@ function get_task_info(task_id, type="") {
             } else {
                 $("#status").text("已结束");
                 $(`#status-${task_id}`).text("dead")
+                var project_name = info.project_info.project_name;
                 if (info.project_info.crash_sequence.length) {
 
-                    save_data = {
+                    var save_data = {
                         crash_seq: info.project_info.crash_sequence,
                         normal_configure: info.runtime.normal_configure,
                         type: info.runtime.type
@@ -99,6 +101,15 @@ function get_task_info(task_id, type="") {
                     save_data = JSON.stringify(save_data);
                     save_crash(task_id, save_data);
                     $("#crash-info").show();
+
+                    if (localStorage.getItem(`overhanged-${task_id}`) == null) {
+                        $('body').overhang({
+                            type: 'success',
+                            message: `任务: ${project_name} 结束`,
+                            duration: 1
+                        });
+                        localStorage.setItem(`overhanged-${task_id}`, "yes");
+                    }
                 }
             }
 
@@ -108,8 +119,10 @@ function get_task_info(task_id, type="") {
             try {
                 sec = parseInt(info.runtime.fuzz_time);
                 min = parseInt(sec / 60);
+                hour = parseInt(min / 60);
                 sec = sec - 60 * min;
-                st = `${min} 分 ${sec} 秒`;
+                min = min - 60 * hour
+                st = `${hour} 时 ${min} 分 ${sec} 秒`;
                 $("#run-time").text(st);
                 fuzz_count = info.runtime.fuzz_count;
                 $("#fuzz-count").text(fuzz_count);
@@ -141,7 +154,7 @@ function save_crash(task_id, save_data) {
     }
 }
 
-if (localStorage.getItem("status-init") == null) {
+if (localStorage.getItem("status-init") != "yes") {
     // 停止并删除所有任务
     ipcRenderer.on('clear-local-storage', (event, src_paths) => {
         var task_ids = remote.getGlobal('sharedObject').task_ids;
@@ -185,8 +198,19 @@ for (let index = 0; index < task_ids.length; index++) {
     console.log(task_id);
     get_status(get_target(), task_id);
 }
-get_task_info(task_id);
 
+
+
+if(localStorage.getItem('current-status-taskid') != null){
+    task_id = localStorage.getItem('current-status-taskid');
+}else{
+    localStorage.setItem("current-status-taskid", task_id);
+}
+
+// alert(task_id);
+// $(`#${task_id}`).click();
+
+get_task_info(task_id, "click");
 
 // 先清除之前的计时器
 var int = parseInt(localStorage.getItem("task-int"));

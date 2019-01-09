@@ -207,7 +207,7 @@ function getdelta(old, now) {
 }
 
 
-if (localStorage.getItem("replay-init") == null) {
+if (localStorage.getItem("replay-init") != "yes") {
 
     ipcRenderer.on('selected-file', (event, path) => {
         // alert(path[0]);

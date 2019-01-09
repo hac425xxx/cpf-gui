@@ -131,13 +131,13 @@
 
 								<div class="col-md-offset-3 col-md-9">
 									<button class="btn btn-info" type="button" id="create-task" onclick="create_task()">
-										<i class="ace-icon fa fa-check"></i>
+										<i class="ace-icon glyphicon glyphicon-send"></i>
 										创建
 									</button>
 
 									&nbsp; &nbsp; &nbsp;
 									<button class="btn" type="reset">
-										<i class="ace-icon fa fa-undo"></i>
+										<i class="ace-icon glyphicon glyphicon-remove"></i>
 										重置
 									</button>
 								</div>
@@ -168,8 +168,13 @@
 <script src="assets/js/index.js"></script>
 
 <script>
-	$("#t1").val("192.168.245.131");
-	$("#t2").val("21");
-	$("#project-name").val("test");
-	$("#speed").val("0");
+	if (localStorage.getItem("current-fuzz-type") == null) {
+		$("#t1").val("192.168.245.131");
+		$("#t2").val("21");
+		$("#project-name").val("test");
+		$("#speed").val("0");
+	}else{
+		$("#selectd").val(localStorage.getItem("current-fuzz-type"));
+		select_type();
+	}
 </script>
