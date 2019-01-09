@@ -88,8 +88,24 @@ function show_task_info() {
     $("#replay-task-info").show()
 }
 
+
+function stop_replay_task(task_id) {
+    t = url.resolve(get_target(), "replay-stop");
+    target = `${t}/${task_id}/`;
+    request({
+        url: target,
+        proxy: "http://127.0.0.1:8080"
+    }, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            console.log(body);
+        }
+    });
+}
+
 function back_form() {
     show_form();
+    replay_taskid = localStorage.getItem("replay-task-id");
+    stop_replay_task(replay_taskid);
     localStorage.setItem("crash-path","f:/iiiii/xxxxx");
     localStorage.removeItem("replay-task-id");
     localStorage.removeItem("replay-finish");
@@ -120,8 +136,7 @@ function check_replay_result() {
         if (!error && response.statusCode == 200) {
             var info = JSON.parse(body);
             if (info.result == "successful") {
-                var int = parseInt(localStorage.getItem("replay-int"));
-                clearInterval(int);
+                
                 if (info.data.crash) {
                     $('body').overhang({
                         type: 'success',
@@ -132,7 +147,7 @@ function check_replay_result() {
                     $("#crash-info").show();
                     $("#result").text("重放成功");
 
-                    localStorage.setItem("replay-finish", "yes");
+                    
 
                 } else {
                     $('body').overhang({
@@ -142,7 +157,25 @@ function check_replay_result() {
                     });
                     $("#result").text("重放失败，crash文件错误或者误报");
                 }
+
+                var int = parseInt(localStorage.getItem("replay-int"));
+                clearInterval(int);
+                localStorage.setItem("replay-finish", "yes");
             }
+            
+            if(info.result == "dead"){
+                $('body').overhang({
+                    type: 'warn',
+                    duration: 3,
+                    message: '重放失败，请确认参数信息是否正确....'
+                });
+                
+                $("#result").text("重放失败，请确认参数信息是否正确");
+                var int = parseInt(localStorage.getItem("replay-int"));
+                clearInterval(int);
+                localStorage.setItem("replay-finish", "yes");
+            }
+
             return info;
         }
     });

@@ -51,14 +51,18 @@ function load_replay() {
 function select_type() {
     selectd = $("#selectd").val()
 
-    
+
     if (selectd.indexOf("tcp") > -1 || selectd.indexOf("udp") > -1) {
         //tcp或者 udp
         $("#t1-name").text("目标地址");
         $("#t2-name").text("目标端口");
-
-        $("#t1").val("192.168.245.131");
-        $("#t2").val("21");
+        if (selectd.indexOf("tcp") > -1) {
+            $("#t1").val("192.168.245.131");
+            $("#t2").val("21");
+        } else {
+            $("#t1").val("192.168.245.158");
+            $("#t2").val("1111");
+        }
 
     }
     if (selectd.indexOf("serial") > -1) {

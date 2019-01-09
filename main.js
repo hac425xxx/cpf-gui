@@ -1,3 +1,4 @@
+// electron-packager.cmd ./ fuzzer-gui --out ..\fuzzer-gui\ --overwrite
 // Modules to control application life and create native browser window
 const { BrowserWindow } = require('electron')
 const { ipcMain, dialog } = require('electron')
