@@ -16,6 +16,7 @@
 		font-size: 16px;
 		border-top: 1px dotted #DCEBF7;
 		padding-left: 12px;
+		margin-top: 20px;
 	}
 </style>
 
@@ -94,7 +95,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label" for="selectd">重放类型</label>
 								<div class="col-sm-4">
-									<div>
+									<div style="width: 99%;">
 										<select class="form-control" id="selectd" onchange="select_type()">
 											<option value="tcp">TCP模式</option>
 											<option value="udp">UDP模式</option>
@@ -151,11 +152,11 @@
 
 				</div><!-- /.row -->
 
-				<div id="replay-task-info">
+				<div id="replay-task-info" style=" margin-left: 10px; ">
 					<div style=" margin-left: 10px; ">
 						<h3 style="color: #596608;font-weight: bold;">重放任务信息</h3>
 					</div>
-					<div class="profile-user-info profile-user-info-striped">
+					<div class="profile-user-info profile-user-info-striped" style="margin-top: 20px;">
 						<div class="profile-info-row">
 							<div class="profile-info-name"> crash路径 </div>
 

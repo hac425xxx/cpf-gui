@@ -210,10 +210,10 @@ function getdelta(old, now) {
 if (localStorage.getItem("replay-init") == null) {
 
     ipcRenderer.on('selected-file', (event, path) => {
-
         // alert(path[0]);
-        console.log(path[0]);
-        $("#crash-path").val(path[0])
+        fpath = path[0];
+        console.log(`select file: ${fpath}`);
+        $("#crash-path").val(fpath)
     });
     // alert("初始化 replay")
     localStorage.removeItem("replay-task-id");

@@ -16,6 +16,7 @@
     </section>
 </header>
 
+
 <div class="main-container ace-save-state" id="main-container">
     <script type="text/javascript">
         try { ace.settings.loadState('main-container') } catch (e) { }
@@ -60,94 +61,92 @@
             <div class="page-content">
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="row">
-                            <h3>当前任务列表</h3>
-                        </div>
 
-                        <!-- <div class="hr hr-18 dotted hr-double"></div> -->
+                        <div>
+                            <div>
+                                <h3 style=" color: #13d539; ">任务列表</h3>
+                            </div>
 
-                        <div class="row">
-                            <table id="task-table" class="table  table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>工程名</th>
-                                        <th>任务ID</th>
-                                        <th>开始时间</th>
-                                        <th>任务状态</th>
-                                        <th>操作</th>
-                                    </tr>
-                                </thead>
+                            <!-- <div class="hr hr-18 dotted hr-double"></div> -->
 
-                                <tbody>
-                                </tbody>
-                            </table>
+                            <div>
+                                <table id="task-table" class="table  table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>工程名</th>
+                                            <th>任务ID</th>
+                                            <th>开始时间</th>
+                                            <th>任务状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
 
 
                         <div id="task-info">
+                            <div>
+                                <h3 style="color: #596608;font-weight: bold;">任务信息</h3>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped" style="margin: 0;margin-top: 20px;">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 项目名 </div>
 
-                            <div class="row" style="background: #8bc36e;">
-                                <h3>任务信息</h3>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-3 no-padding-right" style="text-align: center; background-color: #eee;">
-                                    <label>项目名</label>
+                                    <div class="profile-info-value">
+                                        <span class="editable editable-click" id="project-name">默认</span>
+                                    </div>
                                 </div>
-                                <div class="col-sm-9" style="background-color: #31c5386e; text-align: left;">
-                                    <label id="project-name">默认</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-3 no-padding-right" style="text-align: center; background-color: #eee;">
-                                    <label>任务ID</label>
-                                </div>
-                                <div class="col-sm-9" style="background-color: #31c5386e; text-align: left;">
-                                    <label id="task-id">aaaa-bbbb-cccc-dddd</label>
-                                </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="col-sm-3 no-padding-right" style="text-align: center; background-color: #eee;">
-                                    <label>项目状态</label>
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 任务ID </div>
+                                    <div class="profile-info-value">
+                                        <span class="editable editable-click" id="task-id">aaaa-bbbb-cccc-dddd</span>
+                                    </div>
                                 </div>
-                                <div class="col-sm-9" style="background-color: #31c5386e; text-align: left;">
-                                    <label id="status">运行中...</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-3 no-padding-right" style="text-align: center; background-color: #eee;">
-                                    <label>运行时间</label>
-                                </div>
-                                <div class="col-sm-9" style="background-color: #31c5386e; text-align: left;">
-                                    <label id="run-time">0 分 0 秒</label>
-                                </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="col-sm-3 no-padding-right" style="text-align: center; background-color: #eee;">
-                                    <label>测试次数</label>
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 项目状态 </div>
+                                    <div class="profile-info-value">
+                                        <span class="editable editable-click" id="status">运行中...</span>
+                                    </div>
                                 </div>
-                                <div class="col-sm-9" style="background-color: #31c5386e; text-align: left;">
-                                    <label id="fuzz-count"> 0 次 </label>
-                                </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="col-sm-3 no-padding-right" style="text-align: center; background-color: #eee;">
-                                    <label>工作目录</label>
-                                </div>
-                                <div class="col-sm-9" style="background-color: #31c5386e; text-align: left;">
-                                    <label id="workspace">不存在 </label>
-                                </div>
-                            </div>
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 运行时间 </div>
 
-                            <div class="row" style="display: none;" id="crash-info">
-                                <div class="col-sm-3 no-padding-right" style="text-align: center; background-color: #eee;">
-                                    <label>Crash用例路径</label>
+                                    <div class="profile-info-value">
+                                        <span class="editable editable-click" id="run-time">0 分 10 秒</span>
+                                    </div>
                                 </div>
-                                <div class="col-sm-9" style="background-color: #31c5386e; text-align: left;">
-                                    <label id="crash-path"></label>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 测试次数 </div>
+
+                                    <div class="profile-info-value">
+                                        <span class="editable editable-click" id="fuzz-count">0</span>
+                                    </div>
                                 </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 工作目录 </div>
+
+                                    <div class="profile-info-value">
+                                        <span class="editable editable-click" id="workspace">/tmp</span>
+                                    </div>
+                                </div>
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Crash用例路径 </div>
+
+                                    <div class="profile-info-value">
+                                        <span class="editable editable-click" id="crash-path">f:/crash</span>
+                                    </div>
+                                </div>
+
                             </div>
 
                         </div>
