@@ -3,6 +3,9 @@ const { remote, ipcRenderer } = require('electron');
 const request = require('request');
 const fs = require("fs");
 const url = require("url");
+
+let PROXY_SERVER = ""
+PROXY_SERVER = "http://127.0.0.1:8080"
 // const path = require("path");
 
 function select_file() {
@@ -48,6 +51,22 @@ function load_replay() {
 }
 
 
+function stop_task(task_id) {
+    t = url.resolve(get_target(), "stop");
+    target = `${t}/${task_id}/`;
+    request({
+        url: target,
+        proxy: PROXY_SERVER
+    }, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            // console.log(body);
+            var int = parseInt(localStorage.getItem(`bg-check-${task_id}`));
+            clearInterval(int);
+        }
+    });
+}
+
+
 function background_check_task_status(task_id) {
 
     if (task_id == "aaaa-bbbb-cccc-dddd") {
@@ -62,30 +81,56 @@ function background_check_task_status(task_id) {
     target = `${t}/${task_id}/`;
     request({
         url: target,
-        proxy: "http://127.0.0.1:8080"
+        proxy: PROXY_SERVER
     }, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             var info = JSON.parse(body);
-            // console.log(info);
-            if (!info.runtime.is_run) {
-                var project_name = info.project_info.project_name;
+            if (info.result == "successful") {
+                // console.log(info);
+                if (!info.runtime.is_run) {
+                    var project_name = info.project_info.project_name;
 
 
-                if (localStorage.getItem(`overhanged-${task_id}`) == null) {
-                    $('body').overhang({
-                        type: 'success',
-                        message: `任务: ${project_name} 结束`,
-                        duration: 1
-                    });
-                    localStorage.setItem(`overhanged-${task_id}`, "yes");
+                    if (localStorage.getItem(`overhanged-${task_id}`) == null) {
+
+                        $.toast({
+                            heading: '提示',
+                            text: `任务: ${project_name} 结束`,
+                            position: 'bottom-right',
+                            icon: 'success',
+                            hideAfter: false,
+                            stack: 5
+                        });
+
+                        // 表示已经提示过，无需再次提示
+                        localStorage.setItem(`overhanged-${task_id}`, "yes");
+                    }
+
+                    var int = parseInt(localStorage.getItem(`bg-check-${task_id}`));
+                    // alert(int);
+                    localStorage.setItem("current-status-taskid", task_id);
+                    clearInterval(int);
                 }
-
-
-                var int = parseInt(localStorage.getItem(`bg-check-${task_id}`));
-                // alert(int);
-                localStorage.setItem("current-status-taskid", task_id);
-                clearInterval(int);
+            } else {
+                if(info.status == "dead") {
+                    if (localStorage.getItem(`overhanged-${task_id}`) == null) {
+                        $.toast({
+                            heading: '警告',
+                            text: `任务: ${info.project_info.project_name} 运行失败，请确认配置信息是否正确`,
+                            position: 'bottom-right',
+                            icon: 'warning',
+                            hideAfter: false,
+                            stack: 5
+                        });
+                        localStorage.setItem(`overhanged-${task_id}`, "yes");
+                    }
+                    var int = parseInt(localStorage.getItem(`bg-check-${task_id}`));
+                    // alert(int);
+                    localStorage.setItem("current-status-taskid", task_id);
+                    clearInterval(int);
+                }
             }
+
         }
         return;
     }
@@ -190,12 +235,53 @@ function select_type() {
 }
 
 
+function get_local_task_obj(task_id) {
+    var info = localStorage.getItem(task_id);
+    if (info) {
+        return JSON.parse(info);
+    }
+    return null;
+}
+
+function set_task_dead(task_id){
+    // 设置任务的本地状态为 dead
+    var localTask = get_local_task_obj(task_id);
+    if(localTask){
+        localTask.is_dead = true;
+        localStorage.setItem(task_id, JSON.stringify(localTask));
+    }
+}
+
 function get_target() {
     ret = localStorage.getItem("target");
     return ret;
 }
 
+
+function exit_app() {
+
+    $.sweetModal.confirm('退出会停止所有任务，确认退出吗?', function () {
+        // 首先停止所有运行的任务
+        var task_ids = remote.getGlobal('sharedObject').task_ids;
+        for (let index = 0; index < task_ids.length; index++) {
+            var taskid = task_ids[index];
+            stop_task(taskid);
+
+        }
+        // 清除 localStorage
+        remote.getGlobal('sharedObject').task_ids = [];
+        localStorage.clear();
+
+        ipcRenderer.send('exit-app');
+    });
+}
+
+
+function hide_window() {
+    ipcRenderer.send('hide-window');
+}
+
+
 localStorage.removeItem("status-init");
 localStorage.removeItem("index-init");
 localStorage.removeItem("replay-init");
-

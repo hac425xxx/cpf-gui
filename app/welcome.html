@@ -25,6 +25,10 @@
 
     <link rel="stylesheet" href="assets/css/overhang.min.css" />
 
+    <link href="assets/css/jquery.sweet-modal.min.css" rel="stylesheet">
+    <link href="assets/css/jquery.btnswitch.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/jquery.toast.min.css">
+
 
     <!-- inline styles related to this page -->
 
@@ -39,6 +43,14 @@
     <script src="assets/js/ace.min.js"></script>
     <script src="assets/js/jquery-ui.min.js"></script>
     <script src="assets/js/overhang.min.js"></script>
+
+    <script src="assets/js/jquery.sweet-modal.min.js"></script>
+    <script src="assets/js/jquery.toast.min.js"></script>
+
+    <script src="assets/js/jquery.btnswitch.min.js"></script>
+
+    <script src="assets/js/common.js"></script>
+
 </head>
 
 <style>
@@ -158,13 +170,25 @@
             top: 10%;
             transform: translate(-50%,-50%);
         }
+
+
+        .ace-nav>li {
+            margin-right: 4px;
+            margin-left: 4px;
+            line-height: 45px;
+            height: 45px;
+            border-left: 0;
+            padding: 0;
+            position: relative;
+            float: left;
+        }
 </style>
 
 
 <header style="-webkit-app-region: drag">
     <section>
         <!-- 导航栏 -->
-        <div id="navbar" class="navbar navbar-default          ace-save-state">
+        <div id="navbar" class="navbar navbar-default  ace-save-state">
             <div class="navbar-container ace-save-state" id="navbar-container">
                 <div class="navbar-header pull-left">
                     <a href="#" class="navbar-brand">
@@ -173,6 +197,19 @@
                             通用模糊测试框架
                         </small>
                     </a>
+                </div>
+
+                <div class="navbar-buttons navbar-header pull-right" style="-webkit-app-region: no-drag;" role="navigation">
+                    <ul class="nav ace-nav">
+                        <li class="grey" onclick="hide_window()">
+                            <span class="badge">-</span>
+                        </li>
+
+                        <li class="grey">
+                            <span class="badge" onclick="exit_app()">x</span>
+                        </li>
+
+                    </ul>
                 </div>
             </div><!-- /.navbar-container -->
         </div>
@@ -189,7 +226,7 @@
                             <i class="glyphicon glyphicon-eye-open"></i>
                             <h2>模糊测试设备连接设置</h2>
                         </div>
-
+                        
                         <div class="login-form">
                             <form action="" class="form">
                                 <div class="form-group">
@@ -197,7 +234,9 @@
                                 </div>
                                 <div class="form-group">
                                     <input id="port" class="form-input" type="text" placeholder="设备监听的端口">
+                                
                                 </div>
+
                                 <div class="form-group">
                                     <button class="btn btn-info" type="button" onclick="connect()">
                                         <i class="ace-icon glyphicon glyphicon-log-in"></i>
@@ -237,7 +276,7 @@
         u = `http://${ip}:${port}/connect`;
         request({
             url: u,
-            proxy: "http://127.0.0.1:8080"
+            proxy: PROXY_SERVER
         }, function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 //alert(body);
@@ -250,11 +289,11 @@
                     });
 
                     localStorage.setItem("target", `http://${ip}:${port}`);
-                    setTimeout(function(){
+                    setTimeout(function () {
                         ipcRenderer.send('load-app');
                     }, 1000);
                     //load_index();
-                    
+
                 } else {
                     $('#main-content').overhang({
                         type: 'warn',
@@ -290,6 +329,10 @@
 
     $("#ip").val("192.168.245.158");
     $("#port").val("5000");
+
+    $('#demo').btnSwitch();
+
+
 </script>
 
 </html>

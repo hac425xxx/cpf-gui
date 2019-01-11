@@ -1,19 +1,32 @@
 <header style="-webkit-app-region: drag">
-    <section>
-        <!-- 导航栏 -->
-        <div id="navbar" class="navbar navbar-default          ace-save-state">
-            <div class="navbar-container ace-save-state" id="navbar-container">
-                <div class="navbar-header pull-left">
-                    <a href="#" class="navbar-brand">
-                        <small>
-                            <i class="glyphicon glyphicon-flag"></i>
-                            通用模糊测试框架
-                        </small>
-                    </a>
-                </div>
-            </div><!-- /.navbar-container -->
-        </div>
-    </section>
+	<section>
+		<!-- 导航栏 -->
+		<div id="navbar" class="navbar navbar-default  ace-save-state">
+			<div class="navbar-container ace-save-state" id="navbar-container">
+				<div class="navbar-header pull-left">
+					<a href="#" class="navbar-brand">
+						<small>
+							<i class="glyphicon glyphicon-flag"></i>
+							通用模糊测试框架
+						</small>
+					</a>
+				</div>
+
+				<div class="navbar-buttons navbar-header pull-right" style="-webkit-app-region: no-drag;" role="navigation">
+					<ul class="nav ace-nav">
+						<li class="grey" onclick="hide_window()">
+							<span class="badge">-</span>
+						</li>
+
+						<li class="grey">
+							<span class="badge" onclick="exit_app()">x</span>
+						</li>
+
+					</ul>
+				</div>
+			</div><!-- /.navbar-container -->
+		</div>
+	</section>
 </header>
 
 
@@ -133,7 +146,7 @@
                                 </div>
 
                                 <div class="profile-info-row">
-                                    <div class="profile-info-name"> 工作目录 </div>
+                                    <div class="profile-info-name" id="info-path"> 工作目录 </div>
 
                                     <div class="profile-info-value">
                                         <span class="editable editable-click" id="workspace">/tmp</span>

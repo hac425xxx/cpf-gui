@@ -31,7 +31,7 @@ function replay() {
         request({
             url: target,
             method: "POST",
-            proxy: "http://127.0.0.1:8080",
+            proxy: PROXY_SERVER,
             json: true,
             headers: {
                 "content-type": "application/json",
@@ -62,16 +62,26 @@ function replay() {
                     $("#info-task-id").text(task_id);
                     $("#result").text("正在重放.....");
                     $("#crash-info").hide();
-                    console.log(task_id);
+                    // console.log(task_id);
                     return true;
                 }
 
             }
-            console.log(requestData);
-            $('body').overhang({
-                type: 'warn',
-                duration: 3,
-                message: '任务创建失败...'
+            // $('body').overhang({
+            //     type: 'warn',
+            //     duration: 3,
+            //     message: '任务创建失败...'
+            // });
+            $.sweetModal({
+                content: '任务创建失败，请重试!!!',
+                title: '提示',
+                icon: $.sweetModal.ICON_ERROR,
+                theme: $.sweetModal.THEME_LIGHT,
+                buttons: {
+                    '好的': {
+                        classes: 'redB'
+                    }
+                }
             });
         });
     });
@@ -94,10 +104,10 @@ function stop_replay_task(task_id) {
     target = `${t}/${task_id}/`;
     request({
         url: target,
-        proxy: "http://127.0.0.1:8080"
+        proxy: PROXY_SERVER
     }, function (error, response, body) {
         if (!error && response.statusCode == 200) {
-            console.log(body);
+            console.log("停止 replay 任务成功");
         }
     });
 }
@@ -106,7 +116,7 @@ function back_form() {
     show_form();
     replay_taskid = localStorage.getItem("replay-task-id");
     stop_replay_task(replay_taskid);
-    localStorage.setItem("crash-path","f:/iiiii/xxxxx");
+    localStorage.setItem("crash-path", "f:/iiiii/xxxxx");
     localStorage.removeItem("replay-task-id");
     localStorage.removeItem("replay-finish");
 }
@@ -122,39 +132,57 @@ function check_replay_result() {
     now = (new Date()).getTime().toString();
 
     // alert(getdelta(old, now));
-    if(localStorage.getItem("replay-finish") == null){
+    if (localStorage.getItem("replay-finish") == null) {
         $("#time").text(getdelta(old, now));
     }
-    
+
 
     t = url.resolve(get_target(), "replay-status");
     target = `${t}/${task_id}/`;
     request({
         url: target,
-        proxy: "http://127.0.0.1:8080"
+        proxy: PROXY_SERVER
     }, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             var info = JSON.parse(body);
             if (info.result == "successful") {
-                
+
                 if (info.data.crash) {
-                    $('body').overhang({
-                        type: 'success',
-                        message: '重放成功',
-                        duration: 3
+                    // $('body').overhang({
+                    //     type: 'success',
+                    //     message: '重放成功',
+                    //     duration: 3
+                    // });
+                    $.toast({
+                        heading: '提示',
+                        text: '重放成功',
+                        position: 'bottom-right',
+                        icon: 'success',
+                        hideAfter: false,
+                        stack: 5
                     });
                     $("#info-crash-seq").val(JSON.stringify(info.data.seq));
                     $("#crash-info").show();
                     $("#result").text("重放成功");
 
-                    
+
 
                 } else {
-                    $('body').overhang({
-                        type: 'warn',
-                        duration: 3,
-                        message: '目标依然存活， 确认提供的是正确的 crash log'
+                    // $('body').overhang({
+                    //     type: 'warn',
+                    //     duration: 3,
+                    //     message: '目标依然存活， 确认提供的是正确的 crash log'
+                    // });
+
+                    $.toast({
+                        heading: '提示',
+                        text: '重放失败，crash文件错误或者误报',
+                        position: 'bottom-right',
+                        icon: 'warning',
+                        hideAfter: false,
+                        stack: 5
                     });
+
                     $("#result").text("重放失败，crash文件错误或者误报");
                 }
 
@@ -162,14 +190,23 @@ function check_replay_result() {
                 clearInterval(int);
                 localStorage.setItem("replay-finish", "yes");
             }
-            
-            if(info.result == "dead"){
-                $('body').overhang({
-                    type: 'warn',
-                    duration: 3,
-                    message: '重放失败，请确认参数信息是否正确....'
+
+            if (info.result == "dead") {
+                // $('body').overhang({
+                //     type: 'warn',
+                //     duration: 3,
+                //     message: '重放失败，请确认参数信息是否正确....'
+                // });
+
+                $.toast({
+                    heading: '提示',
+                    text: '重放失败，请确认参数信息是否正确....',
+                    position: 'bottom-right',
+                    icon: 'warning',
+                    hideAfter: false,
+                    stack: 5
                 });
-                
+
                 $("#result").text("重放失败，请确认参数信息是否正确");
                 var int = parseInt(localStorage.getItem("replay-int"));
                 clearInterval(int);
@@ -212,7 +249,7 @@ if (localStorage.getItem("replay-init") != "yes") {
     ipcRenderer.on('selected-file', (event, path) => {
         // alert(path[0]);
         fpath = path[0];
-        console.log(`select file: ${fpath}`);
+        console.log(`选择的文件: ${fpath}`);
         $("#crash-path").val(fpath)
     });
     // alert("初始化 replay")

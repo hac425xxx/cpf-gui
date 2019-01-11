@@ -11,15 +11,9 @@ const shell = electron.shell
 
 const menu = new Menu()
 menu.append(new MenuItem({ label: '开发者工具', click:function(){open_devtools()}}))
-menu.append(new MenuItem({ type: 'separator' }))
 menu.append(new MenuItem({ label: '清除任务', click: function(){
     clean();
 }}))
-menu.append(new MenuItem({ type: 'separator' }))
-menu.append(new MenuItem({ label: '退出', click: function(){
-    app.quit();
-}}))
-menu.append(new MenuItem({ type: 'separator' }))
 menu.append(new MenuItem({ label: '关于', click: function(){
     about();
 }}))
@@ -64,7 +58,13 @@ ipcMain.on('load-app', (event) => {
 });
 
 
+ipcMain.on('exit-app', (event) => {
+    app.quit();
+});
 
+ipcMain.on('hide-window', () => {
+    mainWindow.minimize();
+});
 
 function clean(){
     mainWindow.webContents.send('clear-local-storage');

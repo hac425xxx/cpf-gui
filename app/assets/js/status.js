@@ -5,35 +5,28 @@ function get_taskids() {
     task_ids = remote.getGlobal('sharedObject').task_ids;
     for (let index = 0; index < task_ids.length; index++) {
         const element = task_ids[index];
-        console.log(element);
+        // console.log(element);
     }
     remote.getGlobal('sharedObject').task_ids = [];
 }
 
-function stop_task(task_id) {
-    t = url.resolve(get_target(), "stop");
-    target = `${t}/${task_id}/`;
-    request({
-        url: target,
-        proxy: "http://127.0.0.1:8080"
-    }, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            console.log(body);
-        }
-    });
-}
 
 function get_status(u, task_id) {
     t = url.resolve(u, "status");
     target = `${t}/${task_id}/`;
     request({
         url: target,
-        proxy: "http://127.0.0.1:8080"
+        proxy: PROXY_SERVER
     }, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             info = JSON.parse(body);
-            console.log(info);
-            add_task_info(info.project_info.task_id, info.project_info.start_time, info.project_info.status, info.project_info.project_name)
+            var status = "runing"
+            if(info.status == "dead"){
+                status = "dead"
+            }
+            // :todo 
+            // console.log(info);
+            add_task_info(info.project_info.task_id, info.project_info.start_time, status, info.project_info.project_name)
             return info;
         }
     });
@@ -50,14 +43,14 @@ function is_alive(task_id) {
     var local_info = localStorage.getItem(task_id);
     if (local_info) {
         local_info = JSON.parse(local_info);
-        if (local_info.is_crash) {
+        if (local_info.is_dead) {
             return false
         }
     }
     return true;
 }
 
-function get_task_info(task_id, type="") {
+function get_task_info(task_id, type = "") {
 
     if (task_id == "aaaa-bbbb-cccc-dddd") {
         return
@@ -78,45 +71,62 @@ function get_task_info(task_id, type="") {
     target = `${t}/${task_id}/`;
     request({
         url: target,
-        proxy: "http://127.0.0.1:8080"
+        proxy: PROXY_SERVER
     }, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             var info = JSON.parse(body);
             // console.log(info);
 
-            if (info.runtime.is_run) {
-                $("#status").text("运行中......");
-                $("#crash-info").hide();
-            } else {
-                $("#status").text("已结束");
-                $(`#status-${task_id}`).text("dead")
-                var project_name = info.project_info.project_name;
-                if (info.project_info.crash_sequence.length) {
-
-                    var save_data = {
-                        crash_seq: info.project_info.crash_sequence,
-                        normal_configure: info.runtime.normal_configure,
-                        type: info.runtime.type
-                    }
-                    save_data = JSON.stringify(save_data);
-                    save_crash(task_id, save_data);
-                    $("#crash-info").show();
-
-                    if (localStorage.getItem(`overhanged-${task_id}`) == null) {
-                        $('body').overhang({
-                            type: 'success',
-                            message: `任务: ${project_name} 结束`,
-                            duration: 1
-                        });
-                        localStorage.setItem(`overhanged-${task_id}`, "yes");
-                    }
-                }
-            }
-
             $("#workspace").text(info.project_info.workspace);
             $("#project-name").text(info.project_info.project_name);
             $("#task-id").text(task_id);
-            try {
+            $("#info-path").text("工作目录");
+
+
+            if (info.result == "successful") {
+
+                if (info.runtime.is_run) {
+                    $("#status").text("运行中......");
+                    $("#crash-info").hide();
+                } else {
+                    $("#status").text("已结束");
+                    $(`#status-${task_id}`).text("dead")
+                    var project_name = info.project_info.project_name;
+
+
+
+                    if (info.project_info.crash_sequence.length) {
+
+                        var save_data = {
+                            crash_seq: info.project_info.crash_sequence,
+                            normal_configure: info.runtime.normal_configure,
+                            type: info.runtime.type
+                        }
+                        save_data = JSON.stringify(save_data);
+                        save_crash(task_id, save_data);
+                        $("#crash-info").show();
+
+                        if (localStorage.getItem(`overhanged-${task_id}`) == null) {
+                            // $('body').overhang({
+                            //     type: 'success',
+                            //     message: `任务: ${project_name} 结束`,
+                            //     duration: 1
+                            // });
+                            $.toast({
+                                heading: '提示',
+                                text: `任务: ${project_name} 结束`,
+                                position: 'bottom-right',
+                                icon: 'success',
+                                hideAfter: false,
+                                stack: 5
+                            })
+                            localStorage.setItem(`overhanged-${task_id}`, "yes");
+                        }
+                    }
+                    // 设置任务状态为 dead, 避免为已经 dead 的任务发额外的请求
+                    set_task_dead(task_id);
+                }
+
                 sec = parseInt(info.runtime.fuzz_time);
                 min = parseInt(sec / 60);
                 hour = parseInt(min / 60);
@@ -126,8 +136,33 @@ function get_task_info(task_id, type="") {
                 $("#run-time").text(st);
                 fuzz_count = info.runtime.fuzz_count;
                 $("#fuzz-count").text(fuzz_count);
-            } catch (error) {
+            } else {
 
+                $("#status").text("任务启动失败，请确认配置是否正确");
+                $(`#status-${task_id}`).text("dead")
+                $("#run-time").text("0");
+
+                $("#crash-info").hide();
+                var local_task = JSON.parse(localStorage.getItem(task_id));
+
+                $("#info-path").text("配置文件路径");
+
+                if (info.status == "dead") {
+                    // alert(info.status);
+                    if (localStorage.getItem(`overhanged-${task_id}`) == null) {
+                        $.toast({
+                            heading: '警告',
+                            text: `任务 ${info.project_info.project_name} 运行失败，请确认配置信息是否正确`,
+                            position: 'bottom-right',
+                            icon: 'warning',
+                            hideAfter: false,
+                            stack: 5
+                        });
+                        localStorage.setItem(`overhanged-${task_id}`, "yes");
+                    }
+                    set_task_dead(task_id);
+                }
+                $("#workspace").text(local_task.configure_path);
             }
             return info;
         }
@@ -140,12 +175,20 @@ function save_crash(task_id, save_data) {
     if (info) {
         info = JSON.parse(info);
         dst = path.resolve(info.configure_path, `${task_id}_crash.json`);
-        if (!info.is_crash) {
+        if (!info.is_dead) {
             fs.writeFile(dst, save_data, function (err) {
                 if (err) {
-                    console.log(err);
+                    // console.log(err);
+                    $.toast({
+                        heading: '警告',
+                        text: `任务: ${task_id} 的 crash 用例保存失败`,
+                        position: 'bottom-right',
+                        icon: 'warning',
+                        hideAfter: false,
+                        stack: 5
+                    });
                 } else {
-                    info.is_crash = true;
+                    info.is_dead = true;
                     localStorage.setItem(info.task_id, JSON.stringify(info));
                 }
             })
@@ -161,8 +204,9 @@ if (localStorage.getItem("status-init") != "yes") {
         for (let index = 0; index < task_ids.length; index++) {
             var taskid = task_ids[index];
             stop_task(taskid);
+            var int = parseInt(localStorage.getItem(`bg-check-${taskid}`));
+            clearInterval(int);
         }
-
 
         remote.getGlobal('sharedObject').task_ids = [];
 
@@ -195,19 +239,19 @@ let task_id = "";
 task_ids = remote.getGlobal('sharedObject').task_ids;
 for (let index = 0; index < task_ids.length; index++) {
     task_id = task_ids[index];
-    console.log(task_id);
+    // console.log(task_id);
     get_status(get_target(), task_id);
 }
 
+console.log(`第1次获取: ${task_id}`);
 
-
-if(localStorage.getItem('current-status-taskid') != null){
+if (localStorage.getItem('current-status-taskid') != null) {
     task_id = localStorage.getItem('current-status-taskid');
-}else{
+} else {
     localStorage.setItem("current-status-taskid", task_id);
 }
 
-// alert(task_id);
+console.log(`第2次获取: ${task_id}`);
 // $(`#${task_id}`).click();
 
 get_task_info(task_id, "click");

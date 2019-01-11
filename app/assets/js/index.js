@@ -2,7 +2,7 @@ function zip_dir(src, dst) {
     const compressing = require('compressing');
     compressing.zip.compressDir(src, dst)
         .then(() => {
-            console.log('success');
+            console.log('压缩文件完成');
         })
         .catch(err => {
             console.error(err);
@@ -19,14 +19,26 @@ function upload(u, src) {
 
     request.post({
         url: target,
-        proxy: "http://127.0.0.1:8080",
+        proxy: PROXY_SERVER,
         formData: formData
     }, function (err, response, body) {
         if (err) {
-            $('body').overhang({
-                type: 'warn',
-                duration: 1,
-                message: '配置文件目录上传失败，请重试!!!'
+            // $('body').overhang({
+            //     type: 'warn',
+            //     duration: 1,
+            //     message: '配置文件目录上传失败，请重试!!!'
+            // });
+
+            $.sweetModal({
+                content: '配置文件目录上传失败，请重试!!!',
+                title: '提示',
+                icon: $.sweetModal.ICON_ERROR,
+                theme: $.sweetModal.THEME_LIGHT,
+                buttons: {
+                    '好的': {
+                        classes: 'redB'
+                    }
+                }
             });
             return console.error('upload failed:', err);
         }
@@ -35,10 +47,22 @@ function upload(u, src) {
             $("#workspace").text(JSON.parse(body).output_dir);
             $("#workspace").trigger("click");
         } catch (e) {
-            $('body').overhang({
-                type: 'warn',
-                duration: 1,
-                message: '配置文件目录上传失败，请重试!!!'
+            // $('body').overhang({
+            //     type: 'warn',
+            //     duration: 1,
+            //     message: '配置文件目录上传失败，请重试!!!'
+            // });
+
+            $.sweetModal({
+                content: '配置文件目录上传失败，请重试!!!',
+                title: '提示',
+                icon: $.sweetModal.ICON_ERROR,
+                theme: $.sweetModal.THEME_LIGHT,
+                buttons: {
+                    '好的': {
+                        classes: 'redB'
+                    }
+                }
             });
         }
     });
@@ -75,7 +99,7 @@ function create_task_sub() {
     request({
         url: target,
         method: "POST",
-        // proxy: "http://127.0.0.1:8080",
+        // proxy: PROXY_SERVER,
         json: true,
         headers: {
             "content-type": "application/json",
@@ -90,7 +114,7 @@ function create_task_sub() {
                 task_id: body.task_id,
                 configure_path: $("#fuzzer-configure").val(),
                 workspace: $("#workspace").text(),
-                is_crash: false,
+                is_dead: false,
                 is_init: false
             }
 
@@ -114,10 +138,21 @@ function create_task_sub() {
             }, 1000);
             return body;
         } else {
-            $('body').overhang({
-                type: 'warn',
-                duration: 1,
-                message: '任务创建失败,请重试!!!'
+            // $('body').overhang({
+            //     type: 'warn',
+            //     duration: 1,
+            //     message: '任务创建失败,请重试!!!'
+            // });
+            $.sweetModal({
+                content: '任务创建失败，请重试!!!',
+                title: '提示',
+                icon: $.sweetModal.ICON_ERROR,
+                theme: $.sweetModal.THEME_LIGHT,
+                buttons: {
+                    '好的': {
+                        classes: 'redB'
+                    }
+                }
             });
         }
     });
