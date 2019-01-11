@@ -92,70 +92,82 @@
 								</div>
 							</div>
 
-							<div id="configure_form">
-								<div class="form-group">
-									<label class="col-sm-3 control-label no-padding-left" for="project-name"> 项目名称 </label>
+							<div class="form-group" style="display: none;" id="usb-fuzz-type-form">
+								<label class="col-sm-3 control-label no-padding-left" for="usb-fuzz-type"> USB 测试类型 </label>
 
-									<div class="col-sm-9">
-										<input type="text" id="project-name" class="col-xs-10 col-sm-5">
-									</div>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input name="usb-fuzz-type" type="radio" value="ctrl">ctrl
+									</label>
+
+									<label class="radio-inline">
+										<input name="usb-fuzz-type" type="radio" value="mtp">mtp
+									</label>
 								</div>
+							</div>
 
-								<div class="form-group">
-									<label class="col-sm-3 control-label no-padding-left" for="fuzzer-configure"> 配置路径 </label>
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-left" for="project-name"> 项目名称 </label>
 
-									<div class="col-sm-9">
-										<input onclick="select_directory()" type="text" id="fuzzer-configure" class="col-xs-10 col-sm-5">
-									</div>
-
+								<div class="col-sm-9">
+									<input type="text" id="project-name" class="col-xs-10 col-sm-5">
 								</div>
-								<div>
-									<p id="zip-path" style="display: none;"></p>
-									<p id="workspace" style="display: none;" onclick="create_task_sub()"></p>
-								</div>
+							</div>
 
-								<div class="space-4"></div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-left" for="fuzzer-configure"> 配置路径 </label>
 
-								<div class="form-group">
-									<label id="t1-name" class="col-sm-3 control-label no-padding-left" for="t1"> 目标地址 </label>
-
-									<div class="col-sm-9">
-										<input type="text" id="t1" class="col-xs-10 col-sm-5">
-									</div>
-								</div>
-
-								<div class="form-group">
-									<label id="t2-name" class="col-sm-3 control-label no-padding-left" for="t2"> 目标端口 </label>
-
-									<div class="col-sm-9">
-										<input type="text" id="t2" class="col-xs-10 col-sm-5">
-									</div>
-								</div>
-
-								<div class="form-group">
-									<label class="col-sm-3 control-label no-padding-left" for="speed"> 发包速率 </label>
-
-									<div class="col-sm-9">
-										<input type="text" id="speed" class="col-xs-10 col-sm-5">
-									</div>
-								</div>
-
-								<div class="space-4"></div>
-
-								<div class="col-md-offset-3 col-md-9">
-									<button class="btn btn-info" type="button" id="create-task" onclick="create_task()">
-										<i class="ace-icon glyphicon glyphicon-send"></i>
-										创建
-									</button>
-
-									&nbsp; &nbsp; &nbsp;
-									<button class="btn" type="reset">
-										<i class="ace-icon glyphicon glyphicon-remove"></i>
-										重置
-									</button>
+								<div class="col-sm-9">
+									<input onclick="select_directory()" type="text" id="fuzzer-configure" class="col-xs-10 col-sm-5">
 								</div>
 
 							</div>
+							<div>
+								<p id="zip-path" style="display: none;"></p>
+								<p id="workspace" style="display: none;" onclick="create_task_sub()"></p>
+							</div>
+
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label id="t1-name" class="col-sm-3 control-label no-padding-left" for="t1"> 目标地址 </label>
+
+								<div class="col-sm-9">
+									<input type="text" id="t1" class="col-xs-10 col-sm-5">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label id="t2-name" class="col-sm-3 control-label no-padding-left" for="t2"> 目标端口 </label>
+
+								<div class="col-sm-9">
+									<input type="text" id="t2" class="col-xs-10 col-sm-5">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-left" for="speed"> 发包速率 </label>
+
+								<div class="col-sm-9">
+									<input type="text" id="speed" class="col-xs-10 col-sm-5">
+								</div>
+							</div>
+
+							<div class="space-4"></div>
+
+							<div class="col-md-offset-3 col-md-9">
+								<button class="btn btn-info" type="button" id="create-task" onclick="create_task()">
+									<i class="ace-icon glyphicon glyphicon-send"></i>
+									创建
+								</button>
+
+								&nbsp; &nbsp; &nbsp;
+								<button class="btn" type="reset">
+									<i class="ace-icon glyphicon glyphicon-remove"></i>
+									重置
+								</button>
+							</div>
+
 						</form>
 					</div><!-- /.col -->
 				</div><!-- /.row -->

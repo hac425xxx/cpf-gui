@@ -5,7 +5,7 @@ const fs = require("fs");
 const url = require("url");
 
 let PROXY_SERVER = ""
-PROXY_SERVER = "http://127.0.0.1:8080"
+// PROXY_SERVER = "http://127.0.0.1:8080"
 // const path = require("path");
 
 function select_file() {
@@ -214,6 +214,9 @@ function select_type() {
         }
     }
     if (selectd.indexOf("usb") > -1) {
+
+        $("#usb-fuzz-type-form").show();
+
         //usb
         $("#t1-name").text("设备vid");
         $("#t2-name").text("设备pid");

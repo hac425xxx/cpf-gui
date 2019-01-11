@@ -11,6 +11,11 @@ const shell = electron.shell
 
 const menu = new Menu()
 menu.append(new MenuItem({ label: '开发者工具', click:function(){open_devtools()}}))
+
+menu.append(new MenuItem({ label: '设置代理', click: function(){
+    set_proxy();
+}}))
+
 menu.append(new MenuItem({ label: '清除任务', click: function(){
     clean();
 }}))
@@ -78,6 +83,10 @@ function open_devtools(){
 
 function about(){
     shell.openExternal('http://www.cnblogs.com/hac425/')
+}
+
+function set_proxy(){
+    mainWindow.webContents.send('set-proxy');
 }
 
 function createWindow() {

@@ -192,6 +192,15 @@ if (localStorage.getItem("index-init") != "yes") {
         $("#fuzzer-configure").val(src_path);
         $("#zip-path").text(dst);
     });
+
+    ipcRenderer.on('set-proxy', (event, src_paths) => {
+
+        $.sweetModal.prompt('代理地址', PROXY_SERVER, PROXY_SERVER, function (val) {
+            // $.sweetModal('You typed: ' + val);
+            PROXY_SERVER = val;
+        });
+    });
+
     localStorage.setItem("index-init", "yes")
 }
 
