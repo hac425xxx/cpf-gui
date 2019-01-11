@@ -159,7 +159,7 @@ function check_replay_result() {
                         position: 'bottom-right',
                         icon: 'success',
                         hideAfter: false,
-                        stack: 5
+                        stack: 1
                     });
                     $("#info-crash-seq").val(JSON.stringify(info.data.seq));
                     $("#crash-info").show();
@@ -175,12 +175,12 @@ function check_replay_result() {
                     // });
 
                     $.toast({
-                        heading: '提示',
+                        heading: '警告',
                         text: '重放失败，crash文件错误或者误报',
                         position: 'bottom-right',
                         icon: 'warning',
                         hideAfter: false,
-                        stack: 5
+                        stack: 1
                     });
 
                     $("#result").text("重放失败，crash文件错误或者误报");

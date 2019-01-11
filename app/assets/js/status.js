@@ -21,7 +21,9 @@ function get_status(u, task_id) {
         if (!error && response.statusCode == 200) {
             info = JSON.parse(body);
             var status = "runing"
-            if(info.status == "dead"){
+
+            //info.status 表示异常情况， info.project_info.status表示任务的真实状况
+            if (info.status == "dead" || info.project_info.status == "dead") {
                 status = "dead"
             }
             // :todo 
@@ -96,12 +98,17 @@ function get_task_info(task_id, type = "") {
 
 
                     if (info.project_info.crash_sequence.length) {
-
                         var save_data = {
                             crash_seq: info.project_info.crash_sequence,
                             normal_configure: info.runtime.normal_configure,
                             type: info.runtime.type
                         }
+
+                        // 对于 usb 类型的保存类型， 后面重放是可以使用
+                        if (info.runtime.usb_fuzz_type != null) {
+                            save_data.usb_fuzz_type = info.runtime.usb_fuzz_type;
+                        }
+
                         save_data = JSON.stringify(save_data);
                         save_crash(task_id, save_data);
                         $("#crash-info").show();
@@ -122,9 +129,10 @@ function get_task_info(task_id, type = "") {
                             })
                             localStorage.setItem(`overhanged-${task_id}`, "yes");
                         }
+                        // 设置任务状态为 dead, 避免为已经 dead 的任务发额外的请求
+                        set_task_dead(task_id);
                     }
-                    // 设置任务状态为 dead, 避免为已经 dead 的任务发额外的请求
-                    set_task_dead(task_id);
+
                 }
 
                 sec = parseInt(info.runtime.fuzz_time);
@@ -171,6 +179,7 @@ function get_task_info(task_id, type = "") {
 
 
 function save_crash(task_id, save_data) {
+    console.log(`需要保存的crash日志为：${save_data}`);
     var info = localStorage.getItem(task_id);
     if (info) {
         info = JSON.parse(info);
@@ -178,7 +187,7 @@ function save_crash(task_id, save_data) {
         if (!info.is_dead) {
             fs.writeFile(dst, save_data, function (err) {
                 if (err) {
-                    // console.log(err);
+                    console.log(`保存crash日志异常：${err}`);
                     $.toast({
                         heading: '警告',
                         text: `任务: ${task_id} 的 crash 用例保存失败`,
@@ -188,6 +197,7 @@ function save_crash(task_id, save_data) {
                         stack: 5
                     });
                 } else {
+                    console.log(`crash保存成功，保存路径为 ${dst}`);
                     info.is_dead = true;
                     localStorage.setItem(info.task_id, JSON.stringify(info));
                 }
@@ -243,7 +253,7 @@ for (let index = 0; index < task_ids.length; index++) {
     get_status(get_target(), task_id);
 }
 
-console.log(`第1次获取: ${task_id}`);
+// console.log(`第1次获取: ${task_id}`);
 
 if (localStorage.getItem('current-status-taskid') != null) {
     task_id = localStorage.getItem('current-status-taskid');
@@ -251,7 +261,7 @@ if (localStorage.getItem('current-status-taskid') != null) {
     localStorage.setItem("current-status-taskid", task_id);
 }
 
-console.log(`第2次获取: ${task_id}`);
+// console.log(`第2次获取: ${task_id}`);
 // $(`#${task_id}`).click();
 
 get_task_info(task_id, "click");
@@ -266,7 +276,4 @@ var int = setInterval(function () {
     // console.log($("#task-id").text())
 }, 2000);
 
-localStorage.setItem("task-int", int)
-
-
-
+localStorage.setItem("task-int", int);

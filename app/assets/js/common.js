@@ -220,8 +220,8 @@ function select_type() {
 
         if (localStorage.getItem("usb-fuzz-info") == null) {
             $("#project-name").val("USB模糊测试");
-            $("#t1").val("0xaabb");
-            $("#t2").val("0xccdd");
+            $("#t1").val("0x0781");
+            $("#t2").val("0x5591");
         } else {
             var fuzz_info = JSON.parse(localStorage.getItem("usb-fuzz-info"));
             $("#project-name").val(fuzz_info.project_name);
