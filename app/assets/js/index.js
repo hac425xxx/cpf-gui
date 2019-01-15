@@ -94,12 +94,16 @@ function create_task_sub() {
         workspace: workspace
     };
 
-    // alert("requests");
+    if (fuzz_type.indexOf("usb") > -1) {
+        var usb_fuzz_type = $("input[name='usb-fuzz-type']:checked").val();
+        requestData.usb_fuzz_type = usb_fuzz_type;
+    }
 
+    // alert("requests");
     request({
         url: target,
         method: "POST",
-        // proxy: PROXY_SERVER,
+        proxy: PROXY_SERVER,
         json: true,
         headers: {
             "content-type": "application/json",

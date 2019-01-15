@@ -97,11 +97,11 @@
 
 								<div class="col-sm-9">
 									<label class="radio-inline">
-										<input name="usb-fuzz-type" type="radio" value="ctrl">ctrl
+										<input name="usb-fuzz-type" type="radio" value="ctrl">控制传输方式
 									</label>
 
 									<label class="radio-inline">
-										<input name="usb-fuzz-type" type="radio" value="mtp">mtp
+										<input name="usb-fuzz-type" type="radio" value="bulk">Bulk传输方式
 									</label>
 								</div>
 							</div>
@@ -196,8 +196,8 @@
 	if (localStorage.getItem("current-fuzz-type") == null) {
 		$("#t1").val("192.168.245.131");
 		$("#t2").val("21");
-		$("#project-name").val("test");
-		$("#speed").val("0");
+		$("#project-name").val("TCP模糊测试");
+		$("#speed").val("0.01");
 	} else {
 		$("#selectd").val(localStorage.getItem("current-fuzz-type"));
 		select_type();

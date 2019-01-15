@@ -119,6 +119,22 @@
 								</div>
 							</div>
 
+							
+							<div class="form-group" style="display: none;" id="usb-fuzz-type-form">
+								<label class="col-sm-3 control-label no-padding-left" for="usb-fuzz-type"> USB 测试类型 </label>
+
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input name="usb-fuzz-type" type="radio" value="ctrl">控制传输方式
+									</label>
+
+									<label class="radio-inline">
+										<input name="usb-fuzz-type" type="radio" value="bulk">Bulk传输方式
+									</label>
+								</div>
+							</div>
+
+
 							<div class="space-4"></div>
 
 							<div class="form-group">

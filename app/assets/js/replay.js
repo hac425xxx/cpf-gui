@@ -25,6 +25,11 @@ function replay() {
             t2: t2
         };
 
+        if(replay_type.indexOf("usb") > -1) {
+            var usb_fuzz_type = $("input[name='usb-fuzz-type']:checked").val();
+            requestData.usb_fuzz_type = usb_fuzz_type;
+        }
+
         // console.log(requestData);
         // alert("requests");
 

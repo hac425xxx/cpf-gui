@@ -164,12 +164,14 @@ function select_type() {
         //tcp或者 udp
         $("#t1-name").text("目标地址");
         $("#t2-name").text("目标端口");
+        $("#usb-fuzz-type-form").hide();
         if (selectd.indexOf("tcp") > -1) {
 
             if (localStorage.getItem("tcp-fuzz-info") == null) {
                 $("#project-name").val("TCP模糊测试");
                 $("#t1").val("192.168.245.131");
                 $("#t2").val("21");
+                $("#speed").val("0.01");
             } else {
                 var fuzz_info = JSON.parse(localStorage.getItem("tcp-fuzz-info"));
                 $("#project-name").val(fuzz_info.project_name);
@@ -184,6 +186,7 @@ function select_type() {
                 $("#project-name").val("UDP模糊测试");
                 $("#t1").val("192.168.245.158");
                 $("#t2").val("1111");
+                $("#speed").val("0.01");
             } else {
                 var fuzz_info = JSON.parse(localStorage.getItem("udp-fuzz-info"));
                 $("#project-name").val(fuzz_info.project_name);
@@ -200,11 +203,13 @@ function select_type() {
         //串口
         $("#t1-name").text("设备地址");
         $("#t2-name").text("波特率");
+        $("#usb-fuzz-type-form").hide();
 
         if (localStorage.getItem("serial-fuzz-info") == null) {
             $("#project-name").val("串口模糊测试");
             $("#t1").val("/dev/ttyS0");
             $("#t2").val("115200");
+            $("#speed").val("0.01");
         } else {
             var fuzz_info = JSON.parse(localStorage.getItem("serial-fuzz-info"));
             $("#project-name").val(fuzz_info.project_name);
@@ -225,6 +230,7 @@ function select_type() {
             $("#project-name").val("USB模糊测试");
             $("#t1").val("0x0781");
             $("#t2").val("0x5591");
+            $("#speed").val("0.001");
         } else {
             var fuzz_info = JSON.parse(localStorage.getItem("usb-fuzz-info"));
             $("#project-name").val(fuzz_info.project_name);
