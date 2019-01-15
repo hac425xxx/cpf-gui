@@ -291,6 +291,50 @@ function hide_window() {
 }
 
 
+function zip_dir(src, dst) {
+    const compressing = require('compressing');
+    compressing.zip.compressDir(src, dst)
+        .then(() => {
+            console.log(`${src} 压缩完成, 压缩文件存储于： ${dst}`);
+        })
+        .catch(err => {
+            console.error(err);
+        });
+}
+
+function unzip(src, dst) {
+    const compressing = require('compressing');
+    compressing.zip.uncompress(src, dst)
+        .then(() => {
+            console.log('success');
+        })
+        .catch(err => {
+            console.error(err);
+        });
+}
+
+
+//检测文件或者文件夹存在 nodeJS
+function fsExistsSync(path) {
+    try{
+        fs.accessSync(path,fs.F_OK);
+    }catch(e){
+        return false;
+    }
+    return true;
+}
+
+function test_sync(){
+    $.sweetModal.prompt('输入', PROXY_SERVER, PROXY_SERVER, function (val) {
+        $.sweetModal('You typed: ' + val);
+    });
+
+    // 会先弹下面的，然后才会出来输入框，所以是 异步的 prompt
+    alert(1);
+    console.log("进入。。。。。")
+}
+
+
 localStorage.removeItem("status-init");
 localStorage.removeItem("index-init");
 localStorage.removeItem("replay-init");

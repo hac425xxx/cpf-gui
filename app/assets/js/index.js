@@ -1,14 +1,3 @@
-function zip_dir(src, dst) {
-    const compressing = require('compressing');
-    compressing.zip.compressDir(src, dst)
-        .then(() => {
-            console.log('压缩文件完成');
-        })
-        .catch(err => {
-            console.error(err);
-        });
-}
-
 function upload(u, src) {
     target = url.resolve(u, "upload");
     const formData = {

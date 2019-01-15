@@ -1,6 +1,3 @@
-
-
-
 function get_taskids() {
     task_ids = remote.getGlobal('sharedObject').task_ids;
     for (let index = 0; index < task_ids.length; index++) {
@@ -35,7 +32,7 @@ function get_status(u, task_id) {
 }
 
 function add_task_info(task_id, start_time, status, project_name) {
-    tr = `<tr id="${task_id}" onclick="get_task_info('${task_id}', 'click')"><td>${project_name}</td><td>${task_id}</td><td>${start_time}</td><td id="status-${task_id}">${status}</td><td><div class="hidden-sm hidden-xs btn-group"><button class="btn btn-xs btn-success" onclick="get_task_info('${task_id}', 'click')" type="margin-right: 8px;"><i class="ace-icon glyphicon glyphicon-eye-open"></i></button><button class="btn btn-xs btn-danger stop-btn" onclick="stop_task('${task_id}')"><i class="ace-icon glyphicon glyphicon-stop"></i></button></div></td></tr>`;
+    tr = `<tr id="${task_id}" onclick="get_task_info('${task_id}', 'click')"><td>${project_name}</td><td>${task_id}</td><td>${start_time}</td><td id="status-${task_id}">${status}</td><td><div class="hidden-sm hidden-xs btn-group"><button class="btn btn-xs btn-success" onclick="download_workspace('${task_id}')" type="margin-right: 8px;"><i class="ace-icon glyphicon glyphicon-download-alt"></i></button><button class="btn btn-xs btn-danger stop-btn" onclick="stop_task('${task_id}')"><i class="ace-icon glyphicon glyphicon-stop"></i></button></div></td></tr>`;
     var $table = $('#task-table');
     $table.append(tr);
 }
@@ -179,11 +176,18 @@ function get_task_info(task_id, type = "") {
 
 
 function save_crash(task_id, save_data) {
-    console.log(`需要保存的crash日志为：${save_data}`);
+
     var info = localStorage.getItem(task_id);
     if (info) {
         info = JSON.parse(info);
-        dst = path.resolve(info.configure_path, `${task_id}_crash.json`);
+
+        save_dir = path.join(info.configure_path, "crash")
+        if (fsExistsSync(save_dir) == false) {
+            fs.mkdirSync(save_dir);
+        }
+        dst = path.resolve(save_dir, `${task_id}.json`);
+
+        console.log(`需要保存的crash日志为：${save_data}`);
         if (!info.is_dead) {
             fs.writeFile(dst, save_data, function (err) {
                 if (err) {
@@ -206,6 +210,41 @@ function save_crash(task_id, save_data) {
         $("#crash-path").text(dst);
     }
 }
+
+
+function download_workspace(task_id) {
+
+    local_task = get_local_task_obj(task_id);
+    // 文件解压后存放到 配置目录/workspace 下面
+    configure_path = local_task.configure_path;
+    save_path = path.join(configure_path, `workspace-${task_id}`);
+    $.sweetModal.prompt('workspace保存位置', save_path, save_path, function (val) {
+        download(task_id, val);
+    });
+}
+
+function download(task_id, save_path) {
+    const os = require('os');
+    const path = require("path");
+    const fs = require('fs');
+
+    var tmp_dir = os.tmpdir();
+    // 存放下载的 workspace 压缩文件到 临时目录
+    var tmp_path = path.join(tmp_dir, `workspace-${task_id}.zip`);
+
+    t = url.resolve(get_target(), "download");
+    target = `${t}/${task_id}/`;
+    var stream = fs.createWriteStream(tmp_path);
+    request(target).pipe(stream).on('close', function () {
+
+        if (fsExistsSync(save_path) == false) {
+            fs.mkdirSync(save_path);
+        }
+        unzip(tmp_path, save_path);
+    });
+}
+
+
 
 if (localStorage.getItem("status-init") != "yes") {
     // 停止并删除所有任务
