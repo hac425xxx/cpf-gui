@@ -267,8 +267,14 @@
     }
 
     function connect() {
+
+        
+
         const { remote, ipcRenderer } = require('electron');
         let request = require('request');
+
+        //为了调试
+        ipcRenderer.send('load-app');
 
         var ip = $("#ip").val();
         var port = $("#port").val();

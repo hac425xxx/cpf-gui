@@ -150,6 +150,43 @@ function save_selected_info() {
     localStorage.setItem(`${type}-fuzz-info`, JSON.stringify(fuzz_type_info));
 }
 
+
+
+function show_usb() {
+    hide_net();
+    hide_serial();
+    current_show = document.getElementById("usb")
+    current_show.style.visibility = "visible";
+}
+
+
+function hide_usb() {
+    document.getElementById("usb").style.visibility = "hidden";
+}
+
+function show_serial() {
+    hide_usb();
+    hide_net();
+    current_show = document.getElementById("serial")
+    current_show.style.visibility = "visible";
+}
+
+function hide_serial() {
+    document.getElementById("serial").style.visibility = "hidden";
+}
+
+function show_net() {
+    hide_serial();
+    hide_usb();
+    current_show = document.getElementById("net")
+    current_show.style.visibility = "visible";
+}
+
+function hide_net() {
+    document.getElementById("net").style.visibility = "hidden";
+}
+
+
 function select_type() {
     var selectd = $("#selectd").val()
     var fuzz_type_info = {
@@ -161,6 +198,7 @@ function select_type() {
     }
 
     if (selectd.indexOf("tcp") > -1 || selectd.indexOf("udp") > -1) {
+        show_net();
         //tcp或者 udp
         $("#t1-name").text("目标地址");
         $("#t2-name").text("目标端口");
@@ -200,6 +238,7 @@ function select_type() {
     }
 
     if (selectd.indexOf("serial") > -1) {
+        show_serial();
         //串口
         $("#t1-name").text("设备地址");
         $("#t2-name").text("波特率");
@@ -219,6 +258,7 @@ function select_type() {
         }
     }
     if (selectd.indexOf("usb") > -1) {
+        show_usb();
 
         $("#usb-fuzz-type-form").show();
 

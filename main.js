@@ -91,7 +91,7 @@ function set_proxy(){
 
 function createWindow() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({ width: 1070, height: 630, frame: false })
+    mainWindow = new BrowserWindow({ width: 1306, height: 650, frame: false })
 
     // and load the index.html of the app.
     mainWindow.loadFile('app/welcome.html')
